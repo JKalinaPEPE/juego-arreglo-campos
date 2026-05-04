@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El arreglo de los campos: juego histórico interactivo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Juego histórico interactivo</p>
+        <h1>El arreglo de los campos</h1>
+      </div>
+      <div class="status-panel" aria-live="polite">
+        <span>Puntaje: <strong id="score">0</strong></span>
+        <span>Progreso: <strong id="progressLabel">0%</strong></span>
+      </div>
+    </header>
+
+    <div class="progress-track" aria-label="Barra de progreso">
+      <div id="progressBar" class="progress-bar"></div>
+    </div>
+
+    <main id="game" class="game-board">
+      <section id="screen-start" class="screen active">
+        <div class="hero-layout">
+          <div class="hero-copy">
+            <p class="chapter-label">Río de la Plata colonial, 1784-1805</p>
+            <h2>Ordenar la campaña, controlar el ganado y disputar la frontera</h2>
+            <p>
+              Estás en el Río de la Plata colonial, a fines del siglo XVIII. La campaña es rica
+              en ganado, pero las autoridades la consideran desordenada. Tu misión será entender
+              qué problemas existían y qué soluciones se propusieron para arreglar los campos.
+            </p>
+            <button class="primary-action" data-next="map">Comenzar juego</button>
+          </div>
+          <div class="hero-map" aria-hidden="true">
+            <div class="map-stamp stamp-one">Montevideo</div>
+            <div class="map-stamp stamp-two">Buenos Aires</div>
+            <div class="route-line route-one"></div>
+            <div class="route-line route-two"></div>
+            <div class="cattle-mark">♢</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="screen-map" class="screen">
+        <div class="section-heading">
+          <p class="chapter-label">Mapa visual de la campaña</p>
+          <h2>Explorá el territorio en disputa</h2>
+          <p>Hacé clic en las zonas para descubrir por qué la campaña era ganadera, móvil, fronteriza y difícil de controlar.</p>
+        </div>
+        <div class="map-stage">
+          <button class="map-zone montevideo" data-zone="montevideo">Montevideo</button>
+          <button class="map-zone buenosaires" data-zone="buenosaires">Buenos Aires</button>
+          <button class="map-zone campania" data-zone="campania">Campaña ganadera</button>
+          <button class="map-zone frontera" data-zone="frontera">Frontera con Portugal</button>
+          <button class="map-zone estancias" data-zone="estancias">Estancias</button>
+          <button class="map-zone pueblos" data-zone="pueblos">Pueblos y capillas</button>
+          <button class="map-zone norte" data-zone="norte">Norte misionero</button>
+          <span class="smuggle-road road-a">camino de contrabando</span>
+          <span class="smuggle-road road-b">camino de contrabando</span>
+        </div>
+        <article id="mapInfo" class="info-card">
+          <h3>Elegí una zona del mapa</h3>
+          <p>Cada punto abre una explicación breve. Visitá varias zonas antes de avanzar al primer desafío.</p>
+        </article>
+        <div class="screen-actions">
+          <button class="secondary-action" data-summary>Ver resumen del tema</button>
+          <button class="primary-action" data-next="level1">Ir al nivel 1</button>
+        </div>
+      </section>
+
+      <section id="screen-level1" class="screen">
+        <div class="section-heading">
+          <p class="chapter-label">Nivel 1</p>
+          <h2>Detectar los problemas</h2>
+          <p>Seleccioná solo los problemas que sí corresponden a la campaña rioplatense colonial.</p>
+        </div>
+        <div id="problemGrid" class="card-grid"></div>
+        <div id="level1Feedback" class="feedback" aria-live="polite"></div>
+        <div class="screen-actions">
+          <button class="secondary-action" data-summary>Ver resumen del tema</button>
+          <button class="primary-action" data-next="level2">Continuar al nivel 2</button>
+        </div>
+      </section>
+
+      <section id="screen-level2" class="screen">
+        <div class="section-heading">
+          <p class="chapter-label">Nivel 2</p>
+          <h2>Proponer soluciones</h2>
+          <p>Elegí una medida para cada problema. La idea es entender qué significaba “arreglar” los campos.</p>
+        </div>
+        <div id="solutionGame" class="matching-panel"></div>
+        <div id="level2Feedback" class="feedback" aria-live="polite"></div>
+        <div class="solution-library">
+          <h3>Medidas de arreglo</h3>
+          <div id="solutionDescriptions" class="mini-card-grid"></div>
+        </div>
+        <div class="screen-actions">
+          <button class="secondary-action" data-summary>Ver resumen del tema</button>
+          <button class="primary-action" data-next="level3">Continuar al nivel 3</button>
+        </div>
+      </section>
+
+      <section id="screen-level3" class="screen">
+        <div class="section-heading">
+          <p class="chapter-label">Nivel 3</p>
+          <h2>Tomá decisiones como autoridad colonial</h2>
+          <p>Cada medida modifica el orden colonial, la producción ganadera y el conflicto social.</p>
+        </div>
+        <div class="indicators">
+          <div><span>Orden colonial</span><meter id="orderMeter" min="0" max="100" value="45"></meter></div>
+          <div><span>Producción ganadera</span><meter id="productionMeter" min="0" max="100" value="45"></meter></div>
+          <div><span>Conflicto social</span><meter id="conflictMeter" min="0" max="100" value="35"></meter></div>
+        </div>
+        <div id="decisionBox" class="decision-box"></div>
+        <div id="level3Feedback" class="feedback" aria-live="polite"></div>
+        <div class="screen-actions">
+          <button class="secondary-action" data-summary>Ver resumen del tema</button>
+          <button class="primary-action" data-next="level4">Continuar al nivel 4</button>
+        </div>
+      </section>
+
+      <section id="screen-level4" class="screen">
+        <div class="section-heading">
+          <p class="chapter-label">Nivel 4</p>
+          <h2>Dos miradas sobre el campo</h2>
+          <p>Identificá qué autora ayuda a interpretar cada afirmación.</p>
+        </div>
+        <div class="historiography">
+          <article>
+            <h3>Lucía Rodríguez Arrillaga</h3>
+            <ul>
+              <li>El problema debe leerse en clave imperial, no nacional.</li>
+              <li>Uruguay todavía no existía como Estado.</li>
+              <li>Los documentos hablaban de los campos de Buenos Aires y Montevideo.</li>
+              <li>El territorio tenía límites imprecisos y una frontera disputada.</li>
+            </ul>
+          </article>
+          <article>
+            <h3>María Inés Moraes</h3>
+            <ul>
+              <li>Critica la idea de un territorio vacío o atrasado.</li>
+              <li>Propone mirar el norte y las misiones guaraníticas.</li>
+              <li>Destaca Yapeyú, la ocupación misionera y el componente indígena-guaraní.</li>
+              <li>Muestra mercados internos, trabajadores, estancias y rodeos previos.</li>
+            </ul>
+          </article>
+        </div>
+        <div id="authorGame" class="quiz-panel"></div>
+        <div id="level4Feedback" class="feedback" aria-live="polite"></div>
+        <div class="screen-actions">
+          <button class="secondary-action" data-summary>Ver resumen del tema</button>
+          <button class="primary-action" data-next="level5">Continuar al nivel 5</button>
+        </div>
+      </section>
+
+      <section id="screen-level5" class="screen">
+        <div class="section-heading">
+          <p class="chapter-label">Nivel 5</p>
+          <h2>Conexión con Artigas</h2>
+          <p>El arreglo de los campos anticipa problemas que después serán centrales en el artiguismo.</p>
+        </div>
+        <article class="info-card wide">
+          <p>
+            En 1815, Artigas impulsa el Reglamento Provisorio para el fomento de la campaña y
+            seguridad de sus hacendados. Allí vuelven temas como reparto de tierras, orden rural,
+            producción, frontera y sectores desfavorecidos. No es una copia de los proyectos
+            coloniales: la Corona buscaba fortalecer el Imperio español, mientras el artiguismo
+            actuaba en un contexto revolucionario y de soberanía de los pueblos.
+          </p>
+        </article>
+        <div id="artigasGame" class="quiz-panel"></div>
+        <div id="level5Feedback" class="feedback" aria-live="polite"></div>
+        <div class="screen-actions">
+          <button class="secondary-action" data-summary>Ver resumen del tema</button>
+          <button class="primary-action" data-next="final">Ver resultado final</button>
+        </div>
+      </section>
+
+      <section id="screen-final" class="screen">
+        <div class="final-card">
+          <p class="chapter-label">Resultado final</p>
+          <h2 id="rankTitle">Peón aprendiz</h2>
+          <p class="final-score">Puntaje: <strong id="finalScore">0</strong>/100</p>
+          <p>
+            El arreglo de los campos fue un intento colonial de ordenar una campaña rica, ganadera,
+            fronteriza y difícil de controlar. Sus medidas buscaban repartir tierras y ganado,
+            fundar pueblos, construir capillas, controlar el contrabando y defender la frontera.
+            Pero la historiografía actual muestra que el proceso fue más complejo: no debe leerse
+            como si Uruguay ya existiera, y tampoco como si el territorio estuviera vacío. Había
+            mercados, poblaciones indígenas, misiones, trabajadores rurales y disputas de poder.
+          </p>
+          <blockquote>
+            El arreglo de los campos fue una disputa por el control de la campaña: quién podía ocupar
+            la tierra, quién podía usar el ganado, quién mandaba en la frontera y qué sociedad rural
+            se quería construir.
+          </blockquote>
+          <button class="primary-action" id="restartBtn">Reiniciar juego</button>
+        </div>
+      </section>
+    </main>
+
+    <button class="floating-summary" data-summary>Ver resumen del tema</button>
+  </div>
+
+  <dialog id="summaryDialog">
+    <div class="modal-content">
+      <button class="close-modal" id="closeSummary" aria-label="Cerrar resumen">×</button>
+      <h2>Resumen del tema</h2>
+      <p>
+        El arreglo de los campos fue un debate colonial entre 1784 y 1805 sobre cómo ordenar la
+        campaña rioplatense: controlar el ganado, frenar el contrabando, poblar fronteras, afirmar
+        la autoridad española y transformar una sociedad rural considerada desordenada.
+      </p>
+      <p>
+        La campaña no era un vacío: tenía trabajadores, estancias, rodeos, circuitos comerciales,
+        presencia indígena y misionera. Tampoco debe leerse como si Uruguay ya existiera; el marco
+        era imperial, con campos de Buenos Aires y Montevideo y límites imprecisos.
+      </p>
+    </div>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
